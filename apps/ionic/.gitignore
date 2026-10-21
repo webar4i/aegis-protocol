@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+android/.gradle/
+android/local.properties
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+android/**/build/
+ios/App/Pods/
+ios/App/build/
+ios/App/App/public/
+android/app/src/main/assets/public/

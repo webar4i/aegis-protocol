@@ -11,6 +11,7 @@ Status: experimental echo prototype. The normative wire contract is [PROTOCOL.md
 | `core/` | Negotiation, stream lifecycle, bounded echo session, timeouts | TUN forwarding, arbitrary proxy destinations |
 | `server/` | Listener, concurrency bound, TLS acceptance, graceful process shutdown | Users database, billing, production metrics |
 | `client-cli/` | TLS connection, echo exchange and byte equality verification | System VPN, GUI, DNS configuration |
+| `apps/ionic/` | Ionic React UI scaffold and typed Capacitor bridge contract | Native VPN plugin, Rust FFI, system packet forwarding |
 
 `core` and `protocol` operate on asynchronous byte streams rather than a concrete socket. This keeps transport selection outside the message state machine. The current session service is echo: opening several logical streams does not create independent congestion control or remove TCP head-of-line blocking. Replacing the echo service with IP forwarding requires a new, specified capability and message type; existing `Data` messages must not silently acquire a different meaning.
 
@@ -36,9 +37,13 @@ These are dependency families, not a statement that every later release is compa
 
 The rustls minimum is 0.23.46 because the RustSec advisories issued 2026-10-14 list that release as patched for RUSTSEC-2026-0346 through RUSTSEC-2026-0349. Those advisories concern session-value debug output, rejected ECH application-data ordering, optional Brotli certificate decompression, and unauthenticated key-share prediction. This prototype disables resumption and does not enable ECH or Brotli, but still adopts the patched release. This is a dependency choice, not a claim that the entire dependency graph has passed an advisory scan. See [actual validation](VALIDATION.md).
 
-## Planned ecosystem
+## Client stack and planned ecosystem
 
-The Flutter UI will call a narrow Rust FFI layer for connection lifecycle and statistics. A platform adapter will supply packet I/O and privileged route/DNS operations. Protocol parsing, authorization policy, reconnection and transport selection remain in Rust; platform implementations must not recreate them in Dart, Kotlin or Swift.
+The selected UI stack is Ionic React with TypeScript. Capacitor supplies the Android/iOS application shell and JavaScript-to-native plugin mechanism. The initial `apps/ionic/` scaffold is a UI and typed bridge boundary; it does not include a native VPN plugin or connect the Rust echo session to OS packet routing. Its Web fallback must report unsupported capability and must not fabricate a connected state.
+
+Native Kotlin/Swift adapters will eventually call a narrow Rust FFI layer for connection lifecycle and statistics and supply packet I/O and privileged route/DNS operations. Protocol parsing, authorization policy, reconnection and transport selection remain in Rust; platform implementations must not recreate them in TypeScript, Kotlin or Swift. The future IP tunnel must be implemented and tested before a graphical client can offer real system VPN connectivity.
+
+Capacitor officially targets Android, iOS and Web. It does not itself supply Windows/macOS/Linux VPN backends. The proposed desktop path is a Tauri shell reusing the same Ionic React web assets and Rust core, with native platform packet/privilege adapters. No desktop shell is implemented at this stage. Details and current build requirements are in [CLIENT_ARCHITECTURE.md](CLIENT_ARCHITECTURE.md).
 
 | Target | Planned OS integration | Separate work required |
 | --- | --- | --- |
@@ -47,7 +52,7 @@ The Flutter UI will call a narrow Rust FFI layer for connection lifecycle and st
 | Windows 10/11 | TUN through Wintun | Driver redistribution/license review, service permissions, routes |
 | Linux | `/dev/net/tun` | Least-privilege helper, routing and DNS integration |
 
-Kill switch, split tunneling, DNS/IPv6 leak protection and signed application updates are platform features with explicit acceptance tests. They are not provided by TLS or Flutter automatically. Apple Intel/Apple Silicon and other targets need native builds and device testing before support can be claimed.
+Kill switch, split tunneling, DNS/IPv6 leak protection and signed application updates are platform features with explicit acceptance tests. They are not provided by TLS, Ionic or Capacitor automatically. Apple Intel/Apple Silicon and other targets need native builds and device testing before support can be claimed.
 
 The future Go/PostgreSQL Control API will manage desired policy. A separate authenticated server-management channel will apply policy to Rust nodes. VPN packet traffic must never traverse that API. See [Control API design](../control-api/README.md) and [3x-ui research](../integrations/3x-ui/README.md).
 

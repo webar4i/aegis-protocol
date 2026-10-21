@@ -4,3 +4,4 @@
 *.yml text
 *.toml text
 Cargo.lock text
+*.bat text eol=crlf

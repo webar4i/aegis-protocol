@@ -6,8 +6,9 @@ Dates are deliberately omitted: each stage depends on the previous acceptance ga
 | --- | --- | --- |
 | 1–2: v0.1 | Specification, mTLS transport, Rust echo server/CLI, parser and integration tests | Reproducible round trip; wrong identity and malformed sessions fail; exact checks reported in [docs/VALIDATION.md](VALIDATION.md) |
 | 3: Linux IP tunnel | Versioned IP capability, TUN adapters, controlled routing | TCP/UDP, IPv4/IPv6, DNS, MTU, reconnect and leak tests in isolated network namespaces |
-| 4: Android/Windows | Flutter UI and Rust FFI; native VPN/service adapters | Installable builds, lifecycle/permission tests, route/DNS rollback, kill-switch tests where implemented |
-| 5: iOS/macOS/Linux GUI | Native packet-tunnel adapters and platform packaging | Device/native-architecture tests, entitlement/signing verification, platform capability matrix |
+| UI groundwork, alongside v0.1 | Ionic React/TypeScript scaffold, typed Capacitor bridge and unsupported Web fallback | UI build/tests reported separately; no connected state without a real native tunnel |
+| 4: Android/Windows | Android Capacitor plugin with Rust FFI; proposed Windows Tauri shell with the shared Ionic UI and native service | Installable builds, lifecycle/permission tests, route/DNS rollback, kill-switch tests where implemented |
+| 5: iOS/macOS/Linux GUI | iOS Capacitor Network Extension integration; proposed Tauri desktop shells and platform packet adapters | Device/native-architecture tests, entitlement/signing verification, platform capability matrix |
 | 6: Service management | Go REST API/PostgreSQL, device authorization, node policy, 3x-ui adapter | Credential revoke/expiry reaches nodes; idempotent accounting; privileges separated; integration contract tests |
 | 7: Transport research | QUIC and standards-compliant HTTP candidates; reproducible comparison | Published methodology, environment, raw synthetic measurements and uncertainty; no unsupported anti-DPI claim |
 

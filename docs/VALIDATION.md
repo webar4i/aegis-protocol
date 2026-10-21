@@ -4,6 +4,12 @@ This records executed checks, not planned product capabilities. Tested locally
 on Linux x86_64 with `rustc 1.99.1 (58cf8f9c3 2026-10-13)` and Cargo 1.99.1.
 The manifest declares Rust 1.88; that minimum compiler was not separately run.
 
+The published source at commit `384a48985dbd44ea7c18a10ea2afa3e5c30b560a`
+also passed [GitHub Rust CI](https://github.com/webar4i/aegis-protocol/actions/runs/39572349744):
+Linux, Windows and macOS each ran formatting, strict Clippy, workspace tests
+and release builds successfully. The dependency and fuzz jobs passed too.
+These are CLI/core checks, not native GUI or OS VPN integration tests.
+
 ## Results
 
 | Check | Executed result |
@@ -84,8 +90,9 @@ successful final build required no environment override.
 
 ## Not executed / not implemented
 
-- Windows/macOS execution or cross-compilation. CI jobs are supplied, but have
-  not run remotely at this checkpoint. Android/iOS/Flutter clients do not exist.
+- Native GUI or system VPN execution on Windows/macOS/Android/iOS. The CLI/core
+  Windows/macOS CI checks described above did run. The subsequently added Ionic
+  React/Capacitor shell is reported separately from Rust protocol validation.
 - TUN, IP packet forwarding, routed IPv4/IPv6, real TCP/UDP sessions through a
   VPN, DNS routing/leak tests, kill switch and split tunneling.
 - QUIC, HTTP/2, HTTP/3 or MASQUE implementations or comparative experiments.
@@ -97,6 +104,4 @@ successful final build required no environment override.
 IPv6 **outer transport** echo is not evidence of IPv6 IP-tunnel support.
 The protocol's visible ALPN and TLS behavior are not browser camouflage.
 
-GitHub repository provisioning/publication was still waiting for an authorized
-browser session at this checkpoint; source creation and all local checks above
-are independent of that external step.
+Source is published at [webar4i/aegis-protocol](https://github.com/webar4i/aegis-protocol).
