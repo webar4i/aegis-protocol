@@ -36,6 +36,10 @@
 
 Сборка интерфейса требует Node.js 22 или новее. Инструкции каркаса: [apps/ionic/README.md](apps/ionic/README.md). Границы web/native, требования Android/iOS и порядок интеграции Rust: [docs/CLIENT_ARCHITECTURE.md](docs/CLIENT_ARCHITECTURE.md). Текущий Rust CLI запускается независимо от интерфейса по инструкциям ниже.
 
+Реальные снимки текущего интерфейса: [мобильный экран](docs/previews/mobile.jpg) · [десктопный экран](docs/previews/desktop.jpg). Это оболочка с примерами серверов, без активного системного VPN.
+
+![Aegis Client — десктопный интерфейс](docs/previews/desktop.jpg)
+
 ## Запуск: Linux
 
 Установите стабильный Rust через [rustup](https://rustup.rs/), C-компилятор и linker (Ubuntu/Debian: `build-essential`). Минимальная заявленная версия Rust — 1.88; используйте актуальный stable. Фактически проверенная версия указана в [VALIDATION.md](docs/VALIDATION.md).

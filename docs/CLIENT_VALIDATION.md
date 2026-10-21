@@ -14,6 +14,7 @@ not contain a native VPN plugin or forward IP packets.
 | `npm test` | 5 tests passed: unsupported bridge, truthful active status, status validation, preference handling |
 | `npm audit --audit-level=moderate` | 0 vulnerabilities |
 | Capacitor | Android/iOS project generation and `cap sync` passed |
+| GitHub Ionic CI | Web tests/build/audit and Java 21 Android `assembleDebug` passed for commit `174ca19e8cf52dc8941d186019e7405ae5ed8546` |
 | Desktop browser render | Production assets rendered at 1440 × 1000; no JavaScript page errors |
 | Mobile browser render | Production assets rendered at 390 × 844; horizontal scroll width equals viewport width |
 | Connection control | Opens the honest unavailable-module dialog; no connected/protected state is manufactured |
@@ -40,11 +41,14 @@ Android SDK, while the generated project requires Java 21 and SDK 36. There is
 no Xcode/iOS signing environment on this Linux host. Source generation and
 asset synchronization do not prove that an APK or IPA has been compiled.
 
-`.github/workflows/client.yml` builds/tests/audits the UI, then compiles a debug
-Android shell and uploads its APK when successful. Native CI results and
-artifacts must be checked separately; do not infer success from the workflow
-file. iOS signing, device deployment, desktop native shells and VPN operation
-remain unimplemented/unverified at this checkpoint.
+The [Ionic CI run](https://github.com/webar4i/aegis-protocol/actions/runs/39575619412)
+completed successfully: UI checks and the actual Android Gradle build passed.
+The `aegis-android-ui-shell-debug` artifact contains a 4,519,021-byte APK with
+SHA-256 `a2a4d86295091f3f52173493ee57c71e4eb766af4f06f0ccdf249aff5ea4d212`.
+Artifact download and APK container structure were checked. Installation,
+on-device runtime, iOS compilation/signing, desktop native shells and VPN
+operation remain unimplemented/unverified at this checkpoint. This is a debug
+UI shell, not a functioning Android VPN.
 
 The example server catalog has no usable endpoints or credentials. Browser
 storage contains only non-secret display preferences. The bridge accepts an
