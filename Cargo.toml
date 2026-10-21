@@ -1,0 +1,31 @@
+[workspace]
+resolver = "3"
+members = ["protocol", "transports", "core", "server", "client-cli", "tests"]
+exclude = ["fuzz"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "Apache-2.0"
+repository = "https://github.com/webar4i/aegis-protocol"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full", "test-util"] }
+thiserror = "2"
+clap = { version = "4", features = ["derive"] }
+rustls = { version = "0.23.46", default-features = false, features = ["ring", "std"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring"] }
+tempfile = "3"
+rcgen = { version = "0.13", default-features = false, features = ["ring", "pem", "crypto"] }
+time = ">=0.3.47, <0.4"
+aegis-protocol = { path = "protocol" }
+aegis-transports = { path = "transports" }
+aegis-core = { path = "core" }
+aegis-client = { path = "client-cli" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[profile.release]
+strip = true

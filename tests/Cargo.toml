@@ -1,0 +1,18 @@
+[package]
+name = "aegis-integration-tests"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dev-dependencies]
+aegis-client = { path = "../client-cli" }
+aegis-core = { path = "../core" }
+aegis-protocol = { path = "../protocol" }
+aegis-transports = { path = "../transports" }
+rcgen.workspace = true
+time.workspace = true
+tempfile.workspace = true
+tokio.workspace = true
+tokio-rustls.workspace = true

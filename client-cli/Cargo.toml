@@ -1,0 +1,17 @@
+[package]
+name = "aegis-client"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+aegis-protocol = { path = "../protocol" }
+aegis-transports = { path = "../transports" }
+clap.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+
+[[bin]]
+name = "aegis-client"
+path = "src/main.rs"

@@ -1,0 +1,23 @@
+[package]
+name = "aegis-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+license = "Apache-2.0"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+aegis-protocol = { path = "../protocol" }
+
+[[bin]]
+name = "frame_parser"
+path = "fuzz_targets/frame_parser.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]

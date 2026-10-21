@@ -1,0 +1,13 @@
+/target/
+/fuzz/target/
+/fuzz/artifacts/
+/fuzz/corpus/
+/dev-pki/
+*.key
+*.p12
+*.pfx
+*.log
+*.pcap
+*.pcapng
+.env
+.DS_Store

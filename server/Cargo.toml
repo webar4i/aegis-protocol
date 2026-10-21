@@ -1,0 +1,15 @@
+[package]
+name = "aegis-server"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+aegis-core = { path = "../core" }
+aegis-transports = { path = "../transports" }
+clap.workspace = true
+tokio.workspace = true
+
+[lints]
+workspace = true

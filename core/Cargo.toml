@@ -1,0 +1,14 @@
+[package]
+name = "aegis-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+aegis-protocol = { path = "../protocol" }
+thiserror.workspace = true
+tokio.workspace = true
+
+[lints]
+workspace = true
