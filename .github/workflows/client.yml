@@ -58,7 +58,7 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: aegis-android-ui-shell-debug
           path: apps/ionic/android/app/build/outputs/apk/debug/app-debug.apk
@@ -92,7 +92,7 @@ jobs:
           uname -m
           file apps/ionic/src-tauri/target/release/aegis-client-desktop
           ldd apps/ionic/src-tauri/target/release/aegis-client-desktop
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: aegis-arch-x86_64-ui-shell
           path: apps/ionic/src-tauri/target/release/aegis-client-desktop
