@@ -74,12 +74,29 @@ Network Extension и Packet Tunnel Provider ещё не реализованы; 
 Для повторного создания платформ в чистом проекте без каталогов `android/`
 и `ios/`: `npx cap add android`, `npx cap add ios`, затем `npx cap sync`.
 
-## Windows, macOS и Linux
+## Linux desktop / Arch
 
-Responsive-интерфейс можно запускать в браузере для разработки. Это не desktop
-VPN-клиент. Capacitor обслуживает Android/iOS; настольный контейнер и системные
-адаптеры общего Rust-ядра находятся в плане разработки. Не следует ожидать
-VPN-возможностей от обычной веб-страницы.
+Добавлена оболочка **Tauri 2**: она открывает тот же Ionic-интерфейс в отдельном
+окне, а release-сборка включает web-ресурсы. Capacitor продолжает обслуживать
+Android/iOS. Требуются Rust 1.90+, Node 22.12+ и системные GTK/WebKit-зависимости.
+Полная установка с ярлыком: [инструкция Arch Linux](../../docs/ARCH_LINUX.md).
+
+```bash
+npm ci
+npm run desktop:dev
+```
+
+Сборка: `npm run desktop:build`. Результат:
+`src-tauri/target/release/aegis-client-desktop`. Установить из корня репозитория:
+`node platforms/linux/install.mjs --no-build`. Обычная команда
+`node platforms/linux/install.mjs` также ставит npm-зависимости, запускает
+UI-тесты и собирает бинарник перед установкой.
+
+Desktop crate имеет отдельный Cargo workspace/lock, поэтому GTK-зависимости
+не попадают в portable Rust CLI. WebView получает только локальные ресурсы;
+Tauri capabilities пусты, shell/fs-плагины и собственные IPC-команды не
+зарегистрированы. В UI сохраняется unsupported fallback: **VPN ещё нет**.
+Windows/macOS desktop-сборки и системные VPN-адаптеры ещё не проверены.
 
 ## Контракт системного модуля
 

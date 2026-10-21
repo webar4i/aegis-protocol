@@ -1,9 +1,9 @@
 name: Ionic Client
 on:
   push:
-    paths: ['apps/ionic/**', '.github/workflows/client.yml']
+    paths: ['apps/ionic/**', 'platforms/linux/**', '.github/workflows/client.yml']
   pull_request:
-    paths: ['apps/ionic/**', '.github/workflows/client.yml']
+    paths: ['apps/ionic/**', 'platforms/linux/**', '.github/workflows/client.yml']
   workflow_dispatch:
 
 permissions:
@@ -62,5 +62,39 @@ jobs:
         with:
           name: aegis-android-ui-shell-debug
           path: apps/ionic/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  arch-desktop-shell:
+    needs: web
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    timeout-minutes: 45
+    env:
+      CARGO_BUILD_JOBS: '2'
+    steps:
+      - name: Install Arch build dependencies (full rolling update)
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --needed --noconfirm git nodejs npm rust webkit2gtk-4.1 openssl librsvg xdotool desktop-file-utils
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Test user-local installer in temporary directories
+        run: node --test platforms/linux/install.test.mjs
+      - run: npm ci
+        working-directory: apps/ionic
+      - name: Build Arch desktop UI shell (no VPN module)
+        working-directory: apps/ionic
+        run: npm run desktop:build
+      - name: Record architecture and runtime dependencies
+        run: |
+          uname -m
+          file apps/ionic/src-tauri/target/release/aegis-client-desktop
+          ldd apps/ionic/src-tauri/target/release/aegis-client-desktop
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: aegis-arch-x86_64-ui-shell
+          path: apps/ionic/src-tauri/target/release/aegis-client-desktop
           if-no-files-found: error
           retention-days: 14

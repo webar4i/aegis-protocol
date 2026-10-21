@@ -1,6 +1,6 @@
 # Aegis Client: Ionic React, Capacitor and Rust
 
-Decision date: 2026-10-21. The selected interface stack is **Ionic React + TypeScript**, with **Capacitor for Android/iOS**. The same web interface is intended for future desktop shells. The Rust v0.1 component remains an authenticated echo prototype; it does not yet implement an IP tunnel.
+Decision date: 2026-10-21. The selected interface stack is **Ionic React + TypeScript**, with **Capacitor for Android/iOS** and a **Tauri 2 desktop UI shell** for Linux development. The Rust v0.1 component remains an authenticated echo prototype; it does not yet implement an IP tunnel or connect to the GUI.
 
 ## Implemented scaffold versus VPN capability
 
@@ -45,9 +45,9 @@ Do not send certificate private keys, CA signer keys or bearer secrets through R
 | iOS | Capacitor host app plus a separate Network Extension packet-tunnel target, Swift/Rust FFI | Entitlements, shared protected profile access, extension IPC/lifecycle, signed packaging |
 | Windows | Proposed Tauri desktop shell reusing Ionic assets; Rust service plus Wintun | Privilege separation, route/DNS rollback, driver packaging review |
 | macOS Intel/Apple Silicon | Proposed Tauri shell reusing Ionic assets plus native Network Extension | Entitlements, signing/notarization, extension integration, both architecture builds |
-| Linux | Proposed Tauri shell reusing Ionic assets; Rust packet adapter and privileged helper | `/dev/net/tun`, narrowly scoped privileges, DNS integration and desktop packaging |
+| Linux | Implemented Tauri UI shell reusing Ionic assets; packet adapter and privileged helper remain planned | `/dev/net/tun`, narrowly scoped privileges, DNS integration and production packaging |
 
-Capacitor's officially supported application targets are Android, iOS and Web. Windows/macOS/Linux entries above are **Aegis architecture proposals**, not capabilities provided by Capacitor and not implemented shells. Tauri renders a frontend alongside a Rust backend; it also does not supply a ready VPN data plane. Reuse the common view code, with separate Capacitor and Tauri bridge implementations rather than pretending a mobile plugin runs on desktop.
+Capacitor's officially supported application targets are Android, iOS and Web. Tauri supplies the Linux window and embedded web assets; the Windows/macOS distribution and all native VPN integration remain planned. The desktop crate is an independent nested Cargo workspace so that WebKit/GTK dependencies do not affect portable protocol builds. It exposes no custom IPC commands, shell/filesystem plugins or native VPN bridge. Only the local main window is covered by an empty capability set. Reuse the common view code, with separate Capacitor and future Tauri bridge implementations rather than assuming a mobile plugin runs on desktop.
 
 On Android, protect every outer transport socket from tunnel routing before forwarding begins; otherwise it can loop into its own VPN. On Apple systems, keep the packet tunnel in the OS extension lifecycle rather than relying on a WebView timer. Device tests must verify routes and DNS for IPv4 and IPv6, failure rollback and reconnection. A kill-switch label is enabled only on platforms with an implemented and tested enforcement mechanism.
 
@@ -63,7 +63,7 @@ These requirements were checked in upstream documentation/source on 2026-10-21. 
 | Android Rust library | Rust target toolchains and Android NDK/cross-build integration still need to be configured and validated |
 | iOS shell | macOS, Xcode 26+, Command Line Tools; iOS deployment target 15.0+; Capacitor 8 defaults to Swift Package Manager |
 | Apple Rust libraries | Device/simulator target builds, signed extension embedding and FFI still need implementation/testing |
-| Proposed Tauri desktop | Native Rust toolchain and OS webview/build prerequisites; on Windows, C++ Build Tools and WebView2 |
+| Tauri desktop UI shell | Rust 1.90+, native OS webview/build prerequisites; Linux/Arch setup is documented in ARCH_LINUX.md; Windows packaging needs C++ Build Tools and WebView2 |
 
 Android Studio can supply the JDK; a separately installed JDK must match the generated build. Mobile minimum SDK numbers are upstream baselines, not a promise that every such device supports the future VPN feature set. Recheck requirements when changing major versions.
 

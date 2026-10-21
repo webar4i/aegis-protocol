@@ -1,0 +1,31 @@
+[package]
+name = "aegis-client-desktop"
+version = "0.1.0"
+description = "Aegis desktop UI preview; native VPN integration is not implemented"
+authors = ["Aegis Protocol contributors"]
+edition = "2024"
+rust-version = "1.90"
+license = "Apache-2.0"
+repository = "https://github.com/webar4i/aegis-protocol"
+default-run = "aegis-client-desktop"
+
+# Keep desktop system dependencies out of the portable protocol workspace.
+# This application is built explicitly through the npm desktop scripts.
+[workspace]
+resolver = "3"
+
+[lib]
+name = "aegis_client_desktop"
+crate-type = ["lib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.3", features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.4", features = [] }
+
+[profile.release]
+strip = true
+
+[lints.rust]
+unsafe_code = "forbid"

@@ -32,7 +32,9 @@
 
 ## Интерфейс Ionic React
 
-Общий интерфейс использует [компоненты Ionic](https://ionicframework.com/docs/components), React и TypeScript. Capacitor выбран для мобильных оболочек Android/iOS. В браузере приложение должно явно показывать отсутствие нативного туннеля; успешная сборка UI не означает VPN-подключение. План настольных оболочек — Tauri с тем же web-интерфейсом и Rust-ядром; эта часть пока не реализована.
+Общий интерфейс использует [компоненты Ionic](https://ionicframework.com/docs/components), React и TypeScript. Capacitor выбран для мобильных оболочек Android/iOS. Для Linux добавлена настольная оболочка Tauri 2 с тем же интерфейсом. Она пока не связана с сетевым Rust-ядром и не устанавливает VPN.
+
+**Установка и разработка на Arch Linux:** [docs/ARCH_LINUX.md](docs/ARCH_LINUX.md). Установщик собирает приложение и добавляет ярлык в меню для текущего пользователя; запускать его через sudo не нужно.
 
 Сборка интерфейса требует Node.js 22 или новее. Инструкции каркаса: [apps/ionic/README.md](apps/ionic/README.md). Границы web/native, требования Android/iOS и порядок интеграции Rust: [docs/CLIENT_ARCHITECTURE.md](docs/CLIENT_ARCHITECTURE.md). Текущий Rust CLI запускается независимо от интерфейса по инструкциям ниже.
 

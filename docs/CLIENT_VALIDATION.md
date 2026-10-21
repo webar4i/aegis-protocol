@@ -50,6 +50,49 @@ on-device runtime, iOS compilation/signing, desktop native shells and VPN
 operation remain unimplemented/unverified at this checkpoint. This is a debug
 UI shell, not a functioning Android VPN.
 
+## Linux desktop development shell
+
+Added an independent Tauri 2.12.4 crate and CLI 2.12.3, reusing the existing
+Ionic assets. Desktop Rust MSRV is 1.90; the portable protocol workspace
+retains its separate lock and requirements. No custom Tauri commands or
+native VPN adapter are implemented. Runtime capabilities grant no IPC
+permissions; release assets are local and the dev server binds loopback.
+
+`npm ci`, 5 UI tests, production web build, locked desktop Cargo metadata,
+Tauri configuration parsing and Rust formatting passed. A user-local installer
+and Arch build instructions are in `platforms/linux/` and
+[ARCH_LINUX.md](ARCH_LINUX.md). Installer tests use temporary directories;
+they do not install into the execution host's real home.
+
+The native release build **passed on Ubuntu 24.04 x86_64**, using Rust 1.99.1,
+WebKitGTK 2.52.3 and GTK 3.24.41. The first unconstrained build encountered a
+zero-length compiler object while archiving `tauri-utils`; retrying with
+`CARGO_BUILD_JOBS=2` completed successfully. The installer defaults to two
+Cargo jobs unless overridden. All 9 installer tests passed, including a real
+`desktop-file-validate` check and GLib `gio launch` of a temporary fixture
+whose path contains spaces and shell/desktop metacharacters. This fixture
+launch verifies desktop quoting, not native WebView rendering.
+
+The desktop GUI itself was not launched: this execution host runs as root
+without a user's graphical session. No WebKit sandbox bypass was used.
+Installation on the user's Arch and actual compositor/graphics behavior
+remain to be checked there. Existing browser checks above cover the shared
+Ionic UI, not WebKitGTK compatibility.
+
+NPM audit reports 0 vulnerabilities. Desktop `cargo audit --json` reports
+0 vulnerability advisories **and two unresolved warnings** inherited through
+Tauri's GTK3 stack: `glib 0.18.5` has RUSTSEC-2024-0429 (unsound iterator API),
+and `proc-macro-error 1.0.4` has RUSTSEC-2024-0370 (unmaintained). These are
+not suppressed or presented as a clean desktop security audit. Updating glib
+across its GTK binding version boundary requires an upstream framework change
+or a reviewed compatible patch. This preview is for development, and the
+desktop dependency review remains open before production distribution.
+
+The execution host is Ubuntu 24.04, not the user's Arch machine. Compilation,
+desktop runtime/device checks, user-machine installation and VPN operation
+are separate claims. The Arch CI job builds a bare x86_64 binary in an Arch
+container; it does not test Wayland/X11 interaction or OS packet forwarding.
+
 The example server catalog has no usable endpoints or credentials. Browser
 storage contains only non-secret display preferences. The bridge accepts an
 opaque profile ID for future native secure storage. Kill switch, split
